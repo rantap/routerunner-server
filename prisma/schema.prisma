@@ -6,3 +6,12 @@ datasource db {
     provider = "postgresql"
     url      = env("DATABASE_URL")
 }
+
+model Workout {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    type      String
+    length    Decimal
+    time      DateTime @db.Time()
+}
