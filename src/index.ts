@@ -5,7 +5,7 @@ import helmet from 'helmet';
 
 const app: Express = express();
 const prisma = new PrismaClient();
-const port = 3001;
+const port = process.env.PORT || 3001;
 const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err);
   res.status(500).send({ errors: [{ message: 'Something went wrong' }] });
@@ -23,11 +23,40 @@ app.get('/test', (req, res, next) => {
     next(err);
   }
 });
+
 // Get all workouts
 app.get('/workouts', async (req, res, next) => {
   try {
     const workouts = await prisma.workout.findMany();
     res.status(200).json(workouts);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Get workout by id
+app.get('/workouts/:id', async (req, res, next) => {
+  try {
+    const workout = await prisma.workout.findUnique({
+      where: {
+        id: Number(req.params.id),
+      },
+    });
+    res.status(200).json(workout);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Delete a workout
+app.delete('/workouts/:id', async (req, res, next) => {
+  try {
+    const workout = await prisma.workout.delete({
+      where: {
+        id: Number(req.params.id),
+      },
+    });
+    res.status(200).json(workout);
   } catch (err) {
     next(err);
   }
