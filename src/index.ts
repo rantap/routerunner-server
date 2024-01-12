@@ -2,6 +2,7 @@ import express, { Express, Request, Response, NextFunction } from 'express';
 import { PrismaClient } from '@prisma/client';
 import cors from 'cors';
 import helmet from 'helmet';
+import { Decimal } from '@prisma/client/runtime/library';
 
 const app: Express = express();
 const prisma = new PrismaClient();
@@ -13,6 +14,7 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
 
 app.use(cors());
 app.use(helmet());
+app.use(express.json());
 app.use(errorHandler);
 
 // Connection test
@@ -47,6 +49,27 @@ app.get('/workouts/:id', async (req, res, next) => {
     next(err);
   }
 });
+
+// Add a workout
+app.post('/workouts', async (req, res, next) => {
+  try {
+    const workout = await addWorkout(req.body.type, req.body.length, req.body.time);
+    res.status(201).json(workout);
+  } catch (err) {
+    next(err);
+  }
+});
+
+const addWorkout = async (type: string, length: number, time: string) => {
+  const workout = await prisma.workout.create({
+    data: {
+      type: type,
+      length: length,
+      time: time,
+    },
+  });
+  return workout;
+};
 
 // Delete a workout
 app.delete('/workouts/:id', async (req, res, next) => {
