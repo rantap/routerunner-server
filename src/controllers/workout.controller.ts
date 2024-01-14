@@ -58,6 +58,22 @@ const addWorkout = async (type: string, length: number, time: number) => {
   return workout;
 };
 
+// Update workout
+router.put('/workouts/:id', async (req, res, next) => {
+  try {
+    const { type, length, time } = req.body;
+    const workout = await prisma.workout.update({
+      where: {
+        id: Number(req.params.id),
+      },
+      data: { type: type, length: length, time: time },
+    });
+    res.status(200).json(workout);
+  } catch (err) {
+    next(err);
+  }
+});
+
 // Delete a workout
 router.delete('/workouts/:id', async (req, res, next) => {
   try {
