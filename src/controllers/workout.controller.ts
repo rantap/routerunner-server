@@ -1,11 +1,12 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { PrismaClient } from '@prisma/client';
+import { Workout } from '../models/workout.model';
 
 const router = Router();
 const prisma = new PrismaClient();
 
 // Connection test
-router.get('/test', (req, res, next) => {
+router.get('/test', (_req: Request, res: Response, next: NextFunction) => {
   try {
     res.status(200).json({ message: 'The API IS WORKING' });
   } catch (err) {
@@ -14,7 +15,7 @@ router.get('/test', (req, res, next) => {
 });
 
 // Get all workouts
-router.get('/workouts', async (req, res, next) => {
+router.get('/workouts', async (_req: Request, res: Response, next: NextFunction) => {
   try {
     const workouts = await prisma.workout.findMany();
     res.status(200).json(workouts);
@@ -24,7 +25,7 @@ router.get('/workouts', async (req, res, next) => {
 });
 
 // Get workout by id
-router.get('/workouts/:id', async (req, res, next) => {
+router.get('/workouts/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const workout = await prisma.workout.findUnique({
       where: {
@@ -38,9 +39,10 @@ router.get('/workouts/:id', async (req, res, next) => {
 });
 
 // Add a workout
-router.post('/workouts', async (req, res, next) => {
+router.post('/workouts', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const workout = await addWorkout(req.body.type, req.body.length, req.body.time);
+    const { type, length, time } = req.body as Workout;
+    const workout = await addWorkout(type, length, time);
     res.status(201).json(workout);
   } catch (err) {
     next(err);
@@ -59,9 +61,9 @@ const addWorkout = async (type: string, length: number, time: number) => {
 };
 
 // Update workout
-router.put('/workouts/:id', async (req, res, next) => {
+router.put('/workouts/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { type, length, time } = req.body;
+    const { type, length, time } = req.body as Workout;
     const workout = await prisma.workout.update({
       where: {
         id: Number(req.params.id),
@@ -75,7 +77,7 @@ router.put('/workouts/:id', async (req, res, next) => {
 });
 
 // Delete a workout
-router.delete('/workouts/:id', async (req, res, next) => {
+router.delete('/workouts/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const workout = await prisma.workout.delete({
       where: {
