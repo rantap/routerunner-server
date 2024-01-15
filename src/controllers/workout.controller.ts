@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { PrismaClient } from '@prisma/client';
-import { Workout } from '../models/workout.model';
+import { Prisma, PrismaClient } from '@prisma/client';
+import { Workout } from '@prisma/client';
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -49,11 +49,11 @@ router.post('/workouts', async (req: Request, res: Response, next: NextFunction)
   }
 });
 
-const addWorkout = async (type: string, length: number, time: number) => {
+const addWorkout = async (type: string, length: Prisma.Decimal, time: number) => {
   const workout = await prisma.workout.create({
     data: {
       type: type,
-      length: length,
+      length: new Prisma.Decimal(length),
       time: time,
     },
   });
@@ -68,7 +68,7 @@ router.put('/workouts/:id', async (req: Request, res: Response, next: NextFuncti
       where: {
         id: Number(req.params.id),
       },
-      data: { type: type, length: length, time: time },
+      data: { type: type, length: new Prisma.Decimal(length), time: time },
     });
     res.status(200).json(workout);
   } catch (err) {
