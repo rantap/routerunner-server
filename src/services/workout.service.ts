@@ -19,29 +19,20 @@ export const findWorkoutById = async (id: number) => {
 };
 
 // Add workout function
-export const addWorkout = async (type: string, length: Prisma.Decimal, time: number) => {
+export const addWorkout = async (newWorkout: Prisma.WorkoutCreateInput) => {
   const workout = await prisma.workout.create({
-    data: {
-      type: type,
-      length: new Prisma.Decimal(length),
-      time: time,
-    },
+    data: newWorkout,
   });
   return workout;
 };
 
 // Edit workout function
-export const editWorkout = async (
-  id: number,
-  type: string,
-  length: Prisma.Decimal,
-  time: number,
-) => {
+export const editWorkout = async (id: number, newWorkout: Prisma.WorkoutCreateInput) => {
   const workout = await prisma.workout.update({
     where: {
       id: id,
     },
-    data: { type: type, length: new Prisma.Decimal(length), time: time },
+    data: newWorkout,
   });
   return workout;
 };
