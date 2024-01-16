@@ -1,9 +1,14 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { Prisma, PrismaClient } from '@prisma/client';
 import { Workout } from '@prisma/client';
+import {
+  addWorkout,
+  deleteWorkout,
+  editWorkout,
+  findWorkoutById,
+  getAllWorkouts,
+} from '../services/workout.service';
 
 const router = Router();
-const prisma = new PrismaClient();
 
 // Connection test
 router.get('/test', (_req: Request, res: Response, next: NextFunction) => {
@@ -17,7 +22,7 @@ router.get('/test', (_req: Request, res: Response, next: NextFunction) => {
 // Get all workouts
 router.get('/workouts', async (_req: Request, res: Response, next: NextFunction) => {
   try {
-    const workouts = await prisma.workout.findMany();
+    const workouts = await getAllWorkouts();
     res.status(200).json(workouts);
   } catch (err) {
     next(err);
@@ -27,11 +32,8 @@ router.get('/workouts', async (_req: Request, res: Response, next: NextFunction)
 // Get workout by id
 router.get('/workouts/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const workout = await prisma.workout.findUnique({
-      where: {
-        id: Number(req.params.id),
-      },
-    });
+    const id: number = Number(req.params.id);
+    const workout = await findWorkoutById(id);
     res.status(200).json(workout);
   } catch (err) {
     next(err);
@@ -49,27 +51,12 @@ router.post('/workouts', async (req: Request, res: Response, next: NextFunction)
   }
 });
 
-const addWorkout = async (type: string, length: Prisma.Decimal, time: number) => {
-  const workout = await prisma.workout.create({
-    data: {
-      type: type,
-      length: new Prisma.Decimal(length),
-      time: time,
-    },
-  });
-  return workout;
-};
-
 // Update workout
 router.put('/workouts/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { type, length, time } = req.body as Workout;
-    const workout = await prisma.workout.update({
-      where: {
-        id: Number(req.params.id),
-      },
-      data: { type: type, length: new Prisma.Decimal(length), time: time },
-    });
+    const id: number = Number(req.params.id);
+    const workout = await editWorkout(id, type, length, time);
     res.status(200).json(workout);
   } catch (err) {
     next(err);
@@ -79,11 +66,8 @@ router.put('/workouts/:id', async (req: Request, res: Response, next: NextFuncti
 // Delete a workout
 router.delete('/workouts/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const workout = await prisma.workout.delete({
-      where: {
-        id: Number(req.params.id),
-      },
-    });
+    const id: number = Number(req.params.id);
+    const workout = await deleteWorkout(id);
     res.status(200).json(workout);
   } catch (err) {
     next(err);
