@@ -1,14 +1,11 @@
-import express, { Express, Request, Response, NextFunction } from 'express';
+import express, { Express } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import api from './routes/routes';
+import errorHandler from './middleware/errorHandler';
 
 const app: Express = express();
 const port = process.env.PORT || 3001;
-const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error(err);
-  res.status(500).send({ errors: [{ message: 'Something went wrong' }] });
-};
 
 app.use(cors());
 app.use(helmet());
