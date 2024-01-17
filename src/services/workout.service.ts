@@ -1,6 +1,5 @@
-import { Prisma, PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { Prisma } from '@prisma/client';
+import prisma from '../client/prisma';
 
 // Get all workouts function
 export const getAllWorkouts = async () => {
@@ -27,12 +26,12 @@ export const addWorkout = async (newWorkout: Prisma.WorkoutCreateInput) => {
 };
 
 // Edit workout function
-export const editWorkout = async (id: number, newWorkout: Prisma.WorkoutCreateInput) => {
+export const editWorkout = async (id: number, newWorkout: Prisma.WorkoutUpdateInput) => {
   const workout = await prisma.workout.update({
     where: {
       id: id,
     },
-    data: newWorkout,
+    data: { type: newWorkout.type, length: newWorkout.length, time: newWorkout.time },
   });
   return workout;
 };
