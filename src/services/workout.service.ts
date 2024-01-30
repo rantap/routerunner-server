@@ -31,7 +31,12 @@ export const editWorkout = async (id: number, newWorkout: Prisma.WorkoutUpdateIn
     where: {
       id: id,
     },
-    data: { type: newWorkout.type, length: newWorkout.length, time: newWorkout.time },
+    data: {
+      type: newWorkout.type,
+      date: newWorkout.date,
+      distance: newWorkout.distance,
+      duration: newWorkout.duration,
+    },
   });
   return workout;
 };
