@@ -43,8 +43,8 @@ router.get('/workouts/:id', async (req: Request, res: Response, next: NextFuncti
 // Add a workout
 router.post('/workouts', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { type, length, time } = req.body as Workout;
-    const newWorkout = { type: type, length: length, time: time };
+    const { type, date, distance, duration } = req.body as Workout;
+    const newWorkout = { type: type, date: date, distance: distance, duration: duration };
     const workout = await addWorkout(newWorkout);
     res.status(201).json(workout);
   } catch (err) {
@@ -55,8 +55,8 @@ router.post('/workouts', async (req: Request, res: Response, next: NextFunction)
 // Update workout
 router.put('/workouts/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { type, length, time } = req.body as Workout;
-    const newWorkout = { type: type, length: length, time: time };
+    const { type, date, distance, duration } = req.body as Workout;
+    const newWorkout = { type: type, date: date, distance: distance, duration: duration };
     const id: number = Number(req.params.id);
     const workout = await editWorkout(id, newWorkout);
     res.status(200).json(workout);
