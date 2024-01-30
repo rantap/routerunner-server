@@ -22,16 +22,18 @@ describe('testing workout.service', () => {
       {
         id: 1,
         type: 'Running',
-        length: new Prisma.Decimal(12.12),
-        time: 3600,
+        date: new Date('2024-01-25T10:30:00.000Z'),
+        distance: new Prisma.Decimal(12.12),
+        duration: 3600,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         id: 2,
         type: 'Running',
-        length: new Prisma.Decimal(12.12),
-        time: 3600,
+        date: new Date('2024-01-25T10:30:00.000Z'),
+        distance: new Prisma.Decimal(12.12),
+        duration: 3600,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -48,16 +50,18 @@ describe('testing workout.service', () => {
       {
         id: 1,
         type: 'Running',
-        length: new Prisma.Decimal(12.12),
-        time: 3600,
+        date: new Date('2024-01-25T10:30:00.000Z'),
+        distance: new Prisma.Decimal(12.12),
+        duration: 3600,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         id: 2,
         type: 'Running',
-        length: new Prisma.Decimal(12.12),
-        time: 3600,
+        date: new Date('2024-01-25T10:30:00.000Z'),
+        distance: new Prisma.Decimal(12.12),
+        duration: 3600,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -70,10 +74,18 @@ describe('testing workout.service', () => {
   });
 
   it('should return the created workout', async () => {
-    const newWorkout = { type: 'Running', length: new Prisma.Decimal(12.12), time: 3600 };
+    const newWorkout = {
+      type: 'Running',
+      date: new Date('2024-01-25T10:30:00.000Z'),
+      distance: new Prisma.Decimal(12.12),
+      duration: 3600,
+    };
     const mockWorkout = {
       ...newWorkout,
       id: 1,
+      date: new Date('2024-01-25T10:30:00.000Z'),
+      distance: new Prisma.Decimal(12.12),
+      duration: 3600,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -87,8 +99,9 @@ describe('testing workout.service', () => {
   it('should update workout by id', async () => {
     const mockWorkout = {
       type: 'Running',
-      length: new Prisma.Decimal(12.12),
-      time: 3600,
+      date: new Date('2024-01-25T10:30:00.000Z'),
+      distance: new Prisma.Decimal(12.12),
+      duration: 3600,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -99,8 +112,9 @@ describe('testing workout.service', () => {
     expect(workout).toStrictEqual({
       id: 2,
       type: 'Running',
-      length: new Prisma.Decimal(12.12),
-      time: 3600,
+      date: new Date('2024-01-25T10:30:00.000Z'),
+      distance: new Prisma.Decimal(12.12),
+      duration: 3600,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
@@ -110,8 +124,9 @@ describe('testing workout.service', () => {
     const mockWorkout = {
       id: 1,
       type: 'Running',
-      length: new Prisma.Decimal(10.52),
-      time: 1800,
+      date: new Date('2024-01-25T10:30:00.000Z'),
+      distance: new Prisma.Decimal(10.52),
+      duration: 1800,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
