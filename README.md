@@ -2,7 +2,7 @@
 
 ## [Open client](https://routerunner.netlify.app/)
 
-Express REST API and database for the Routerunner application
+Express REST API and database for the Routerunner application running in AWS EC2 instance.
 
 ## Tech stack
 
@@ -10,3 +10,4 @@ Express REST API and database for the Routerunner application
 - Express
 - Prisma
 - PostgreSQL
+- Vitest
