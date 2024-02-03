@@ -6,6 +6,7 @@
     "test": "vitest",
     "build": "npx tsc",
     "start": "node ./dist/src/index.js",
+    "migrate:start": "npx prisma migrate deploy && npm run start",
     "dev": "nodemon -L ./src/index.ts",
     "lint": "npx tsc --noEmit && eslint"
   },
@@ -17,7 +18,8 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "helmet": "^7.1.0",
-    "prisma": "^5.7.1"
+    "prisma": "^5.7.1",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
