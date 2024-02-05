@@ -2,7 +2,7 @@
 
 ## [Open client](https://routerunner.netlify.app/)
 
-Express REST API and database for the Routerunner application running in AWS EC2 instance.
+Express REST API and database for the Routerunner application running in Render.
 
 ## Tech stack
 
