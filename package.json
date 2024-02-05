@@ -6,7 +6,7 @@
     "test": "vitest",
     "build": "npx tsc",
     "start": "node ./dist/src/index.js",
-    "migrate:start": "npx prisma migrate deploy && npm run start",
+    "migrate:start": "npx prisma db push && npm run start",
     "dev": "nodemon -L ./src/index.ts",
     "lint": "npx tsc --noEmit && eslint"
   },
