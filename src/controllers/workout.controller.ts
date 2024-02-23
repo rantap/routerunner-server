@@ -5,7 +5,7 @@ import {
   deleteWorkout,
   editWorkout,
   findWorkoutById,
-  getAllWorkouts,
+  getPaginatedWorkouts,
 } from '../services/workout.service';
 
 const router = Router();
@@ -19,10 +19,12 @@ router.get('/test', (_req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-// Get all workouts
-router.get('/workouts', async (_req: Request, res: Response, next: NextFunction) => {
+// Get paginated workouts
+router.get('/workouts', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const workouts = await getAllWorkouts();
+    const currentPageNumber: number = Number(req.query.page);
+    const resultsPerPage: number = Number(req.query.results);
+    const workouts = await getPaginatedWorkouts(currentPageNumber, resultsPerPage);
     res.status(200).json(workouts);
   } catch (err) {
     next(err);
