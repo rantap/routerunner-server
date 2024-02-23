@@ -7,6 +7,15 @@ export const getAllWorkouts = async () => {
   return workouts;
 };
 
+// Get paginated workouts function
+export const getPaginatedWorkouts = async (currentPageNumber: number, resultsPerPage: number) => {
+  const workouts = await prisma.workout.findMany({
+    skip: resultsPerPage * (currentPageNumber - 1),
+    take: resultsPerPage,
+  });
+  return workouts;
+};
+
 // Get workout by id function
 export const findWorkoutById = async (id: number) => {
   const workout = await prisma.workout.findUnique({
