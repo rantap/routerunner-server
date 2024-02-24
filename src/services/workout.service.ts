@@ -9,11 +9,26 @@ export const getAllWorkouts = async () => {
 
 // Get paginated workouts function
 export const getPaginatedWorkouts = async (currentPageNumber: number, resultsPerPage: number) => {
-  const workouts = await prisma.workout.findMany({
-    skip: resultsPerPage * (currentPageNumber - 1),
-    take: resultsPerPage,
-  });
-  return workouts;
+  // Prisma doesn't automatically return the total count of items, hence two queries -- not very efficient
+  // According to the GitHub repo issues page they're working on the matter, so check on this later again
+  const [workouts, count] = await prisma.$transaction([
+    prisma.workout.findMany({
+      skip: resultsPerPage * (currentPageNumber - 1),
+      take: resultsPerPage,
+      orderBy: {
+        date: 'desc',
+      },
+    }),
+    prisma.workout.count(),
+  ]);
+  const numOfPages = Math.ceil(count / resultsPerPage);
+  const hasMorePages = count > resultsPerPage * currentPageNumber;
+
+  return {
+    numOfPages: numOfPages,
+    hasMorePages: hasMorePages,
+    workouts: workouts,
+  };
 };
 
 // Get workout by id function
