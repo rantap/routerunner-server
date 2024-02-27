@@ -6,9 +6,15 @@ import {
   editWorkout,
   findWorkoutById,
   getPaginatedWorkouts,
+  getTotals,
 } from '../services/workout.service';
 
 const router = Router();
+
+interface DateQuery {
+  start: string;
+  end: string;
+}
 
 // Connection test
 router.get('/test', (_req: Request, res: Response, next: NextFunction) => {
@@ -30,6 +36,20 @@ router.get('/workouts', async (req: Request, res: Response, next: NextFunction) 
     next(err);
   }
 });
+
+// Get total workout calculations
+router.get(
+  '/total',
+  async (req: Request<unknown, unknown, unknown, DateQuery>, res: Response, next: NextFunction) => {
+    try {
+      const { start, end } = req.query;
+      const workouts = await getTotals(start, end);
+      res.status(200).json(workouts);
+    } catch (err) {
+      next(err);
+    }
+  },
+);
 
 // Get workout by id
 router.get('/workouts/:id', async (req: Request, res: Response, next: NextFunction) => {
