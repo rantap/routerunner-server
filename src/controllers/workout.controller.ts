@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { Workout } from '@prisma/client';
+import { WorkoutSchema } from '../schema';
 import {
   addWorkout,
   deleteWorkout,
@@ -65,10 +65,17 @@ router.get('/workouts/:id', async (req: Request, res: Response, next: NextFuncti
 // Add a workout
 router.post('/workouts', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { type, date, distance, duration } = req.body as Workout;
-    const newWorkout = { type: type, date: date, distance: distance, duration: duration };
-    const workout = await addWorkout(newWorkout);
-    res.status(201).json(workout);
+    const workoutValidation = WorkoutSchema.safeParse(req.body);
+    if (!workoutValidation.success) {
+      res
+        .status(400)
+        .json({ message: 'Invalid request body', errors: workoutValidation.error.errors });
+    } else {
+      const { type, date, distance, duration } = workoutValidation.data;
+      const newWorkout = { type, date, distance, duration };
+      const workout = await addWorkout(newWorkout);
+      res.status(201).json(workout);
+    }
   } catch (err) {
     next(err);
   }
@@ -77,11 +84,18 @@ router.post('/workouts', async (req: Request, res: Response, next: NextFunction)
 // Update workout
 router.put('/workouts/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { type, date, distance, duration } = req.body as Workout;
-    const newWorkout = { type: type, date: date, distance: distance, duration: duration };
-    const id: number = Number(req.params.id);
-    const workout = await editWorkout(id, newWorkout);
-    res.status(200).json(workout);
+    const workoutValidation = WorkoutSchema.safeParse(req.body);
+    if (!workoutValidation.success) {
+      res
+        .status(400)
+        .json({ message: 'Invalid request body', errors: workoutValidation.error.errors });
+    } else {
+      const { type, date, distance, duration } = workoutValidation.data;
+      const newWorkout = { type, date, distance, duration };
+      const id: number = Number(req.params.id);
+      const workout = await editWorkout(id, newWorkout);
+      res.status(200).json(workout);
+    }
   } catch (err) {
     next(err);
   }
