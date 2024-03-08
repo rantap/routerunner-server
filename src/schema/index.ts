@@ -4,7 +4,7 @@ import { Prisma } from '@prisma/client';
 export const WorkoutSchema = z.object({
   type: z.string(),
   date: z.coerce.date(),
-  distance: z.instanceof(Prisma.Decimal, { message: "Field 'distance' must be a Decimal." }),
+  distance: z.number(),
   duration: z.number().int(),
 });
 
